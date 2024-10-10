@@ -21,7 +21,7 @@ from . preferences import PreferencesPanel
 from . icon_helper import IconHelper
 from typing import List, Tuple
 
-ASSET_TYPE_OBJECT = "objects"
+ASSET_TYPE_OBJECT = "assets"
 ASSET_TYPE_MATERIAL = "materials"
 ASSET_TYPE_HDRI = "hdri"
 ASSET_TYPE_NODES = "nodes"
@@ -119,7 +119,6 @@ class CategoriesCache:
         path = os.path.join(PreferencesPanel.get().root, asset_type, basedir)
         if os.path.exists(path):
             icon = os.path.join(part, "icon.png") if use_icons else None
-
             asset_folder = AssetFolder(
                 "<ROOT>" if depth == 0 else basedir,
                 "<ROOT>" if depth == 0 else os.path.split(path)[1],

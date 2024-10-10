@@ -28,29 +28,30 @@ def main(args):
         args = parser.parse_args(args)
 
         blend = args.blend
-        packImages = args.pack
+        # packImages = args.pack
 
-        print(f"Blend to fix: {blend}")
-        print(f"Images to pack: {packImages}")
+        # print(f"Blend to fix: {blend}")
+        # print(f"Images to pack: {packImages}")
 
         bpy.ops.wm.open_mainfile(filepath=blend)
 
-        for o in bpy.data.objects:
-            bpy.context.scene.collection.objects.link(o)
-        if packImages:
-            for p in packImages:
-                for i in bpy.data.images:
-                    if i.filepath.endswith(p):
-                        i.pack()
-                        break
-        
-        bpy.ops.object.move_to_collection(collection_index=0, is_new=True,
-                                          new_collection_name=bpy.data.objects[0].name.split("_",1)[0]
-                                          )
-        
-        bpy.context.view_layer.update()
-        bpy.context.preferences.filepaths.save_version = 0 # No backup blends needed
-        bpy.ops.wm.save_as_mainfile(filepath=blend, compress=True)
+        # for o in bpy.data.objects:
+        #     bpy.context.scene.collection.objects.link(o)
+        # if packImages:
+        #     for p in packImages:
+        #         for i in bpy.data.images:
+        #             if i.filepath.endswith(p):
+        #                 i.pack()
+        #                 break
+        if bool(bpy.data.collections) == False:
+            bpy.ops.object.select_all(action='SELECT')
+            bpy.ops.object.move_to_collection(collection_index=0, is_new=True,
+                                            new_collection_name=bpy.data.objects[0].name.split("_",1)[0]
+                                            )
+            
+            bpy.context.view_layer.update()
+            bpy.context.preferences.filepaths.save_version = 0 # No backup blends needed
+            bpy.ops.wm.save_as_mainfile(filepath=blend, compress=True)
 
 if __name__ == "__main__":
     if "--" not in sys.argv:

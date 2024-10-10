@@ -139,7 +139,7 @@ class Properties(PropertyGroup):
         ).items
     )
     iobj_at_cursor: BoolProperty(name="At Cursor", description="Move imported objects to cursor position", default=False)
-    iobj_lock_xy: BoolProperty(name="Lock XY", description="Lock in XY plane (move & rotation)")
+    iobj_lock_xy: BoolProperty(name="锁定到XY", description="Lock in XY plane (move & rotation)")
     imat_categories: EnumProperty(
         name="", 
         description="Material category",

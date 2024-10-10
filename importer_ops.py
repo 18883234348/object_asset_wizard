@@ -20,7 +20,7 @@ from bpy.types              import Operator
 from mathutils              import Vector
 
 from . properties           import Properties
-from . execute_blender      import execute_blender
+from . execute_blender      import execute_blender, run_blend_fix_coll
 
 class ImportBase:
     """
@@ -77,7 +77,51 @@ class ImportBase:
 
             # Select all objects.
             self.select_children(coll)
+            
+    def link_collecttion(self, importFile, at_cursor=False, lock_xy=False, coll_is=False):
+        """
+        
+        """
+        if importFile.endswith(".fbx"):
+            bpy.ops.import_scene.fbx(filepath=importFile)
 
+        elif importFile.endswith(".blend"):
+            with bpy.data.libraries.load(importFile, link=False) as (data_from, data_to):
+                data_to.collections = data_from.collections
+                
+            offset = bpy.context.scene.cursor.location if at_cursor else Vector((0, 0, 0))
+
+            if data_to.collections != None:
+                for new_coll in data_to.collections:
+                    instance = bpy.data.objects.new(new_coll.name, None)
+                        
+                    instance.instance_type = 'COLLECTION'
+                    instance.instance_collection = new_coll
+                    
+                    if instance.parent == None:
+                        instance.location += offset   
+                    if lock_xy:
+                        instance.lock_location[2] = True
+                        instance.lock_rotation[0] = True
+                        instance.lock_rotation[1] = True
+
+                    #实例化集合对象
+                    activeCol = bpy.context.collection
+                    activeCol.objects.link(instance)
+                    
+                    #设置为激活对象
+                    instance.select_set(True)
+                    bpy.context.view_layer.objects.active = instance
+            else:
+                return None
+            
+    def fix_coll(self, importFile):
+        if importFile.endswith(".fbx"):
+            pass
+            return True
+        elif importFile.endswith(".blend"):
+            run_blend_fix_coll(importFile)
+            return False
     def append_materials(self, blendFile):
         """
         Import all materials from blend file and return list of names (with their new names).
@@ -99,6 +143,24 @@ class ImportBase:
 
         return None
 
+class FixCollectionOperator(Operator,ImportBase):
+    bl_idname = "asset_wizard.fix_coll_op"
+    bl_label = "Fix_Coll"
+    bl_description = "Fix blend File Addon Into Collection"
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    def execute(self, context):
+        prop = Properties.get()
+
+        fix_coll_bool = self.fix_coll(prop.iobj_previews)
+        
+        if fix_coll_bool ==True:
+            self.report({'INFO'},"文件后缀为FBX无需修复")
+            
+        elif fix_coll_bool == False:
+            self.report({'INFO'},"已执行修复")
+        
+        return {'FINISHED'}
 
 class AppendObjectOperator(Operator, ImportBase):
     bl_idname = "asset_wizard.append_object_op"
@@ -109,16 +171,30 @@ class AppendObjectOperator(Operator, ImportBase):
     def execute(self, context):
         # Deselect all objects.
         [ o.select_set(False) for o in context.scene.objects ]
-
+        
         prop = Properties.get()
         self.append_objects(
             prop.iobj_previews, 
             False,
             prop.iobj_at_cursor,
-            prop.iobj_lock_xy
+            prop.iobj_lock_xy,
         )
         return{'FINISHED'}
 
+class LinkCollectionOperator(Operator, ImportBase):
+    bl_idname = "asset_wizard.link_coll_op"
+    bl_label = "Link"
+    bl_description = "Link collection to scene"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        [ o.select_set(False) for o in context.scene.objects ]
+        
+        prop = Properties.get()
+    
+        if self.link_collecttion(prop.iobj_previews,prop.iobj_at_cursor,prop.iobj_lock_xy) == None:
+            self.report({'INFO'},"文件内没有集合")
+        return{'FINISHED'}
 
 class LinkObjectOperator(Operator, ImportBase):
     bl_idname = "asset_wizard.link_object_op"

@@ -305,7 +305,6 @@ class ObjectExporterOperator(Operator, ExportObjectBase):
         # https://blender.stackexchange.com/questions/129592/bpy-data-libraries-write-not-working
         run_blend_fix(path, textures_to_pack)
 
-
     def export_fbx(self, path):
         bpy.ops.export_scene.fbx(filepath=path, use_selection=True)
 
@@ -362,3 +361,4 @@ class ObjectExporterOperator(Operator, ExportObjectBase):
         )
         
         return {'FINISHED'}
+
