@@ -14,12 +14,22 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
+import platform
 import bpy, os
 
 from bpy.types import AddonPreferences
 from bpy.props import StringProperty, EnumProperty, BoolProperty, FloatProperty
 
 from .t3dn_bip.ops import InstallPillow
+def is_windows():
+    return platform.system() == "Windows"
+def is_macos():
+    return platform.system() == "Darwin"
+def get_lib_path():
+    if is_windows():
+        return "D:/Files/桌面/AW_lib"
+    if is_macos():
+        return "/Users/wangxianzhi/Desktop/AW_lib"
 
 
 class T3DN_OT_bip_showcase_install_pillow(bpy.types.Operator, InstallPillow):
@@ -36,9 +46,7 @@ class PreferencesPanel(AddonPreferences):
 
     root: StringProperty(
         name="Asset root directory",
-        default="os.path.splitdrive(__file__)[0]",  # REMOVE->DEVELOPMENT
-        # C:/Users/Administrator/Desktop/Test/
-        # default=os.path.splitdrive(__file__)[0],
+        default=get_lib_path(),
         description="Path to Root Asset Directory",
         subtype="DIR_PATH"
     )

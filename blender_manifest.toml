@@ -1,0 +1,13 @@
+schema_version = "1.0.0"
+id = "object_asset_wizard"
+name = "Object Asset Wizard"
+version = "0.3.2"
+tagline = "实用资产管理器"
+maintainer = "xz-blender repack"
+type = "add-on"
+tags = [ "Import-Export",]
+blender_version_min = "4.2.0"
+license = [ "SPDX:GPL-2.0-or-later",]
+website = "https://github.com/xz-blender/object_asset_wizard"
+copyright = [ "blender",]
+wheels = []

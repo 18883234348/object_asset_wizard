@@ -14,6 +14,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
+import platform
 import bpy
 import os
 
@@ -118,7 +119,7 @@ class CategoriesCache:
 
         path = os.path.join(PreferencesPanel.get().root, asset_type, basedir)
         if os.path.exists(path):
-            icon = os.path.join(part, "icon.png") if use_icons else None
+            icon = os.path.join(path, "icon.png") if use_icons else None
             asset_folder = AssetFolder(
                 "<ROOT>" if depth == 0 else basedir,
                 "<ROOT>" if depth == 0 else os.path.split(path)[1],
