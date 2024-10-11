@@ -14,14 +14,17 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
-import bpy, os
-
+import bpy, os,platform
 from bpy.types import AddonPreferences
 from bpy.props import StringProperty, EnumProperty, BoolProperty, FloatProperty
 
 from .t3dn_bip.ops import InstallPillow
 
-
+if platform.system() == 'Windows':
+    AW_lib = 'Z:/Projects/Code/AW_lib'
+elif platform.system() == 'Darwin':  # MacOS的系统平台名称
+    AW_lib = '/user/test'
+    
 class T3DN_OT_bip_showcase_install_pillow(bpy.types.Operator, InstallPillow):
     bl_idname = 't3dn.bip_showcase_install_pillow'
 
@@ -34,31 +37,26 @@ class PreferencesPanel(AddonPreferences):
         ('BLENDER_EEVEE', "Eevee", ""),
     )
 
-    root: StringProperty(
-        name="Asset root directory",
-        default="C:/Dropbox/Blender/Assets",  # REMOVE->DEVELOPMENT
-        # default=os.path.splitdrive(__file__)[0],
+    root: StringProperty(name="Asset root directory",
+        default=AW_lib,
         description="Path to Root Asset Directory",
         subtype="DIR_PATH"
-    )
+        )# type: ignore
 
-    preview_engine: EnumProperty(name="Preview render engine", items=preview_engine_type)
-
-    show_blend: BoolProperty(name="Show .blend", default=True)
-    show_fbx: BoolProperty(name="Show .fbx", default=True)
-
-    compact_panels: BoolProperty(name="Use compact panels", default=True)
-
-    separate_categories: BoolProperty(name="Visually separate top categories", default=True)
+    preview_engine: EnumProperty(name="Preview render engine", items=preview_engine_type)# type: ignore
+    show_blend: BoolProperty(name="Show .blend", default=True)# type: ignore
+    show_fbx: BoolProperty(name="Show .fbx", default=True)# type: ignore
+    compact_panels: BoolProperty(name="Use compact panels", default=True)# type: ignore
+    separate_categories: BoolProperty(name="Visually separate top categories", default=True)# type: ignore
 
     preview_scale: FloatProperty(
         name="Scale factor for previews",
         default=1.0,
         soft_min=0.2,
         soft_max=5.0
-    )
+    )# type: ignore
 
-    use_category_icons: BoolProperty(name="Use category icons", default=False)
+    use_category_icons: BoolProperty(name="Use category icons", default=False)# type: ignore
 
     export_remap: EnumProperty(
         name="Remap export paths:",
@@ -69,7 +67,7 @@ class PreferencesPanel(AddonPreferences):
             ('ABSOLUTE', "ABSOLUTE", "Make all paths absolute on writing"),
         ],
         default='ABSOLUTE'
-    )
+    )# type: ignore
 
     def draw(self, context):
         layout = self.layout
