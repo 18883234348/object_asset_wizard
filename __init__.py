@@ -23,7 +23,7 @@ from . preview_helper       import PreviewHelper
 from . panels               import ImportPanel, ExportPanel, NodeWizardPanel, NodeWizardMapPanel, NodeWizardExportPanel
 from . create_category_ops  import CreateCategoryOperator
 from . exporter_ops         import UseObjectNameOperator, OverwriteObjectExporterOperator, TexturePackSelectionOperator,ObjectExporterOperator
-from . importer_ops         import (AppendObjectOperator, LinkObjectOperator, LinkCollectionOperator, FixCollectionOperator,
+from . importer_ops         import (AppendObjectOperator, LinkObjectOperator, 
                                         SetMaterialOperator, AppendMaterialOperator, OpenObjectOperator, OpenMaterialOperator)
 from . render_previews_ops  import ModalTimerOperator, RenderPreviewsOperator, RenderAllPreviewsOperator   
 from . generate_ops         import GeneratePBROperator, GenerateImageOperator, ExportPBROperator, ExportMaterialOperator             
@@ -162,9 +162,7 @@ ops = [
     OverwriteObjectExporterOperator,
     TexturePackSelectionOperator,
     ObjectExporterOperator,
-    FixCollectionOperator,
-    AppendObjectOperator,
-    LinkCollectionOperator,
+    AppendObjectOperator, 
     LinkObjectOperator, 
     SetMaterialOperator, 
     AppendMaterialOperator, 
@@ -205,7 +203,6 @@ ops = [
     ReRenderMaterialPreview,
     RemoveAsset,
     AutoNumberExportName,
-    
 ]
 
 def register():

@@ -15,8 +15,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
 # blender --background --factory-startup --python fix_blend.py -- [Asset.blend] [Pack=True/False]
-import bpy, sys, argparse 
-import os
+import bpy, sys, argparse
 
 def main(args):
     print("Script args: ", args)
@@ -43,10 +42,6 @@ def main(args):
                     if i.filepath.endswith(p):
                         i.pack()
                         break
-        
-        bpy.ops.object.move_to_collection(collection_index=0, is_new=True,
-                                          new_collection_name=bpy.data.objects[0].name.split("_",1)[0]
-                                          )
         
         bpy.context.view_layer.update()
         bpy.context.preferences.filepaths.save_version = 0 # No backup blends needed

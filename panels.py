@@ -25,7 +25,7 @@ from . preview_helper       import PreviewHelper
 from . properties           import Properties
 from . create_category_ops  import CreateCategoryOperator
 from . exporter_ops         import UseObjectNameOperator, OverwriteObjectExporterOperator, TexturePackSelectionOperator, ObjectExporterOperator
-from . importer_ops         import (AppendObjectOperator, LinkObjectOperator, LinkCollectionOperator, FixCollectionOperator,
+from . importer_ops         import (AppendObjectOperator, LinkObjectOperator, 
                                     SetMaterialOperator, AppendMaterialOperator, OpenObjectOperator, OpenMaterialOperator)
 from . render_previews_ops  import RenderPreviewsOperator,RenderAllPreviewsOperator        
 from . generate_ops         import GeneratePBROperator, GenerateImageOperator, ExportPBROperator, ExportMaterialOperator             
@@ -82,29 +82,18 @@ class ImportPanel(Panel):
                 )
                 split = col.row(align=True).split(factor=0.5, align=True)
                 split.operator(RefreshObjectPreviews.bl_idname, icon="FILE_REFRESH")
-                split.operator(ReRenderObjectPreview.bl_idname, icon="RENDER_STILL",text="重新渲染")
+                split.operator(ReRenderObjectPreview.bl_idname, icon="RENDER_STILL")
 
-                split_outer = col.row(align=True).split(factor=1, align=True)
+                split_outer = col.row(align=True).split(factor=0.9, align=True)
                 is_fbx = properties.iobj_previews.lower().endswith(".fbx")
                 if is_fbx:
                     split_outer.operator(AppendObjectOperator.bl_idname, icon="ADD")
                 else:
-                    split = split_outer.split(align=True)
-                    
+                    split = split_outer.split(factor=0.333, align=True)
+                    split.operator(AppendObjectOperator.bl_idname, icon="ADD")
                     split.operator(LinkObjectOperator.bl_idname, icon="LINK_BLEND")
-                    split.operator(LinkCollectionOperator.bl_idname, icon = "OUTLINER_COLLECTION")
-                    split.operator(AppendObjectOperator.bl_idname, icon="ADD")  
-                    
-                split_outer = col.row(align=True).split(factor=0.4, align=True)  
-                split1 = split_outer.split(factor=1,align=True)               
-                split1.operator(OpenObjectOperator.bl_idname, icon="FILE")
-                split2 = split_outer.split(factor=0.8,align=True)   
-                split2.operator(FixCollectionOperator.bl_idname, icon="COLLECTION_NEW" ,text="文件内修复集合")
-                op = split2.operator(RemoveAsset.bl_idname, icon="PANEL_CLOSE", text="")
-                
-                # split_link_col_outliner = col.row()
-                
-                
+                    split.operator(OpenObjectOperator.bl_idname, icon="FILE")
+                op = split_outer.operator(RemoveAsset.bl_idname, icon="PANEL_CLOSE", text="")
                 op.asset_type = ASSET_TYPE_OBJECT
                 op.asset = properties.iobj_previews
 
@@ -483,7 +472,7 @@ class NodeWizardMapPanel(Panel):
                 col.row(align=True).prop(properties, "cao_export_userfolder")
             split = col.row(align=True).split(factor=0.9, align=True)
             split.prop(properties, "cao_export_map_basename")
-            split.operator(UseObjectNameForMap.bl_idname, icon="FILE_TEXT", text="")
+            split.operator(UseObjectNameForMap.bl_idname, icon="URL", text="")
 
         if not compact:
             box = layout.box()

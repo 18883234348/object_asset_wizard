@@ -70,18 +70,6 @@ def run_blend_fix(asset, pack):
         args.append(p)
     
     execute_blender(args).wait() # Wait for completion.
-    
-def run_blend_fix_coll(asset):
-    args = [
-        "--background",
-        "--factory-startup",
-        "--python",
-        os.path.join(os.path.dirname(__file__), "fix_blend_coll.py"),
-        "--",
-        asset,
-    ]
-    
-    execute_blender(args).wait() # Wait for completion.
 
 def run_preview_render(asset_type, filename, engine):
     """
